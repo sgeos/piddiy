@@ -25,7 +25,7 @@ fn hydraulic_pressure_compute(
 
     // If the error sign changes, reset the integral to zero to prevent windup.
     if error * pid.error < 0.0 {
-      integral = 0.0;
+        integral = 0.0;
     }
 
     (error, integral, derivative)

@@ -13,10 +13,10 @@ fn main() {
     let set_point = 100.0; // Target light intensity
     let mut pid = PidController::<f64, f64>::new(); // T and U are both f64
     pid.compute_fn(PidController::default_compute) // Use the default compute function
-       .set_point(set_point)
-       .kp(0.8) // Proportional gain
-       .ki(0.2) // Integral gain
-       .kd(0.2); // Derivative gain
+        .set_point(set_point)
+        .kp(0.8) // Proportional gain
+        .ki(0.2) // Integral gain
+        .kd(0.2); // Derivative gain
 
     println!("Target Intensity: {:.2} lux", set_point);
     println!("Initial Intensity: {:.2} lux", intensity);
@@ -34,4 +34,3 @@ fn main() {
         );
     }
 }
-

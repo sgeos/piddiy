@@ -2,15 +2,50 @@
 
 //! A simple PID control library designed for `no_std` environments.
 
-use num_traits::{Float, FloatConst};
+use core::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign};
+use num_traits::{One, Signed, Zero};
 
-/// Function pointer to compute error, integral, and derivative.
-type ComputeFn<T, U> = fn(&mut PidController<T, U>, U) -> (T, T, T);
+/// Custom trait to encapsulate all necessary operations for PID calculations.
+pub trait Number:
+    Add
+    + AddAssign
+    + Copy
+    + Div
+    + DivAssign
+    + Mul
+    + MulAssign
+    + One
+    + PartialOrd
+    + Signed
+    + Sub
+    + SubAssign
+    + Zero
+{
+}
+
+// Implement `Number` for types that satisfy all these constraints.
+impl<
+        T: Add
+            + AddAssign
+            + Copy
+            + Div
+            + DivAssign
+            + Mul
+            + MulAssign
+            + One
+            + PartialOrd
+            + Signed
+            + Sub
+            + SubAssign
+            + Zero,
+    > Number for T
+{
+}
 
 /// A generic PID controller.
 pub struct PidController<T, U>
 where
-    T: Float + FloatConst,
+    T: Number,
 {
     /// Target setpoint for the PID controller.
     pub set_point: T,
@@ -30,9 +65,12 @@ where
     compute: ComputeFn<T, U>,
 }
 
+/// Function pointer to compute error, integral, and derivative.
+type ComputeFn<T, U> = fn(&mut PidController<T, U>, U) -> (T, T, T);
+
 impl<T, U> PidController<T, U>
 where
-    T: Float + FloatConst,
+    T: Number,
 {
     /// Constructs a new `PidController` with default settings.
     pub fn new() -> Self {

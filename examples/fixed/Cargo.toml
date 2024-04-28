@@ -1,0 +1,9 @@
+[package]
+name = "piddiy_fixed_example"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+fixed = { version = "1.27.0", features = ["num-traits"] }
+libc = "0.2.153"
+piddiy = { path = "../../" }
