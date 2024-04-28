@@ -4,14 +4,14 @@
 name = "piddiy"
 version = "0.1.0"
 authors = ["Brendan Sechter <sgeos@hotmail.com>"]
-categories = ["algorithms", "embedded", "no-std", "no-std::no-alloc"]
+categories = ["algorithms", "embedded", "hardware-support", "no-std", "no-std::no-alloc"]
 description = "DIY custom PID controller toolkit."
 documentation = "https://docs.rs/piddiy"
 edition = "2021"
-keywords = ["pid"]
+keywords = ["automation", "control-systems", "embedded", "pid"]
 license = "0BSD"
 readme = "README.md"
 repository = "https://github.com/sgeos/piddiy"
 
 [dependencies]
-num-traits = "0.2.18"
+num-traits = "0.2"

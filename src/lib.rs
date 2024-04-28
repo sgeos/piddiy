@@ -370,6 +370,69 @@ where
         (error, integral, derivative)
     }
 
+    /// Computes the default PID output considering variable time steps, using standard PID formulas.
+    /// This method is designed to provide default logic when PID updates do not occur at consistent time intervals.
+    /// It calculates the error, integral, and derivative terms, adjusting the integral and derivative calculations
+    /// to reflect the actual time elapsed (`dt`) between updates.
+    ///
+    /// ## Parameters
+    /// - `measurement`: The current measurement from the process being controlled, used to calculate the error.
+    /// - `dt`: The time delta since the last update, used to scale the integral and derivative calculations appropriately.
+    ///
+    /// This method automatically adjusts the integral term to ensure that it accumulates correctly over varying update intervals,
+    /// and it calculates the derivative term to provide a consistent rate of change that accounts for the actual elapsed time.
+    ///
+    /// ## Returns
+    /// A tuple containing:
+    /// - `error`: The current error, calculated as the difference between the setpoint and the actual measurement.
+    /// - `integral`: The time-adjusted integral of the error, which accounts for the total accumulated error over time,
+    ///                scaled by the elapsed time to prevent integral windup in systems with variable sampling rates.
+    /// - `derivative`: The derivative of the error, calculated using the backward difference method, scaled by the time delta
+    ///                 to ensure consistency across different update rates.
+    ///
+    /// ## Example Usage
+    /// ```
+    /// use piddiy::PidController;
+    ///
+    /// // Define a structure to hold the control data including the current measurement and the time delta.
+    /// struct ControlData {
+    ///     measurement: f32,
+    ///     dt: f32, // Time delta since the last update
+    /// }
+    ///
+    /// // Create a new PID controller and set up the compute function using default_compute_dt
+    /// let mut pid: PidController<f32, ControlData> = PidController::new();
+    /// pid.compute_fn(|pid, data| {
+    ///     // Use the default_compute_dt function, passing in the measurement and time delta from the control data
+    ///     pid.default_compute_dt(data.measurement, data.dt)
+    /// });
+    ///
+    /// // Initialize the control data with an example measurement and a time delta
+    /// let user_data = ControlData {
+    ///     measurement: 0.5f32, // Current measurement
+    ///     dt: 0.1f32, // Time delta in seconds
+    /// };
+    ///
+    /// // Set the desired set point for the PID controller
+    /// let set_point = 1.0f32;
+    /// pid.set_point(set_point);
+    ///
+    /// // Compute the PID control output using the current control data
+    /// let control_output = pid.compute(user_data);
+    ///
+    /// // Output the control action result
+    /// println!("Control Output: {}", control_output);
+    /// ```
+    ///
+    /// This example demonstrates how to implement a PID control strategy using a variable time step, which adjusts
+    /// the integral and derivative calculations based on the actual elapsed time.
+    pub fn default_compute_dt(&mut self, measurement: T, dt: T) -> (T, T, T) {
+        let error = self.calculate_error(measurement);
+        let integral = self.calculate_integral_dt(error, dt);
+        let derivative = self.calculate_derivative_backward(error, dt);
+        (error, integral, derivative)
+    }
+
     /// Default PID controller compute function.
     ///
     /// This function uses a zero value as a placeholder for actual measurements
