@@ -13,5 +13,9 @@ license = "0BSD"
 readme = "README.md"
 repository = "https://github.com/sgeos/piddiy"
 
+[features]
+default = []
+std = ["num-traits/std"]
+
 [dependencies]
-num-traits = "0.2"
+num-traits = { version = "0.2", default-features = false }
