@@ -1,6 +1,7 @@
-// src/lib.rs
-
 //! A simple PID control library designed for `no_std` environments.
+#![cfg_attr(not(feature = "std"), no_std)]
+
+// src/lib.rs
 
 use core::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign};
 use num_traits::{One, Signed, Zero};
